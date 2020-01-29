@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchbase
+  labels:
+    component: couchbase
+spec:
+  clusterIP: None
+  selector:
+    component: couchbase
+  ports:
+    - port: 8091
+      name: client1
+      targetPort: 8091
+    - port: 8092
+      name: client2
+      targetPort: 8092
+    - port: 8093
+      name: client3
+      targetPort: 8093
+    - port: 8094
+      name: client4
+      targetPort: 8094
+    - port: 11210
+      name: client5
+      targetPort: 11210
