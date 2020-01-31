@@ -5,10 +5,10 @@ metadata:
   labels:
     component: food-db-server
 spec:
-  clusterIP: None
+  type: NodePort
   selector:
     component: food-db-server
   ports:
-    - port: 27017
-      name: mongoport
-      targetPort: 27017
+    - name: mongonative
+      port: 27017
+      targetPort: mongonative
