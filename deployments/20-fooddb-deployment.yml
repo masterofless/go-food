@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: couchbase
+  name: food-db-server
   labels:
-    component: couchbase
+    component: food-db-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: couchbase
+      component: food-db-server
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,17 +16,23 @@ spec:
       maxUnavailable: 1
   template:
     metadata:
-      name: couchbase
+      name: food-db-server
       labels:
-        component: couchbase
+        component: food-db-server
     spec:
       containers:
-      - name: couchbase
-        image: couchbase:latest
-        imagePullPolicy: IfNotPresent
+      - name: food-db-server
+        image: mongo:4
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: initdb-root-username
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: initdb-root-passwd
         ports:
-          - containerPort: 8091
-          - containerPort: 8092
-          - containerPort: 8093
-          - containerPort: 8094
-          - containerPort: 11210
+          - containerPort: 27017

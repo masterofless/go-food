@@ -1,9 +1,9 @@
-#!/bin/bash -exu
+#!/bin/bash -eu
 
-export WORKSPACE=afc
-export BUILD_NUMBER=${BUILD_NUMBER:-0}
-export BUILD_NUMBER=$(($BUILD_NUMBER + 1))
-export REPO_PREFIX=masterofless/go-food
-export BRANCH=`git status | grep 'On branch' | perl -pe 's/On branch //'`
+export NAMESPACE=${NAMESPACE:-afc}
+export BUILD_NUMBER=${BUILD_NUMBER:-latest}
+export REPO_PREFIX=${REPO_PREFIX:-masterofless/go-food}
+export BRANCH=${BRANCH:-`git status | grep 'On branch' | perl -pe 's/On branch //'`}
 
-build/build.sh && build/deploy.sh && build/test.sh
+set -x
+build/build.sh $* && build/deploy.sh $* && build/test.sh $*

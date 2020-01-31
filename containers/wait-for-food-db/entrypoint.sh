@@ -1,16 +1,17 @@
-#!/bin/bash -exu
+#!/bin/bash -xu
 
-export DEST=${DEST:-couchbase:8091}
+export DEST_HOST=${DEST_HOST:-food-db-server}
+export DEST_PORT=${DEST_PORT:-27017}
 
-echo "Curl sampling;waiting for $DEST"
+echo "NC sampling; waiting for MySQL at ${DEST_HOST} ${DEST_PORT}"
 let count=0
-until $(curl -m 5 --output /dev/null --silent --head --fail $DEST); do
+until $(ncat --wait 3 ${DEST_HOST} ${DEST_PORT} </dev/null > /dev/null); do
     let count=count+1
-    if ((count >= 20)); then
-        echo "Timeout waiting for $$DEST"
+    if ((count >= 10)); then
+        echo "Timeout waiting for ${DEST_HOST} ${DEST_PORT}"
         exit -1
     fi
     printf '.'
     sleep 5
 done
-echo "$DEST is alive"
+echo "${DEST_HOST} ${DEST_PORT} is alive"

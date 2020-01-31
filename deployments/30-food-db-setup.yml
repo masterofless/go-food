@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: food-db-setup
+spec:
+  template:
+    metadata:
+      name: food-db-setup
+    spec:
+      initContainers:
+      - name: wait-for-food-db
+        image: masterofless/go-food/wait-for-food-db:master.383
+      containers:
+      - name: food-db-setup
+        image: masterofless/go-food/food-db-test:master.383
+      restartPolicy: OnFailure
